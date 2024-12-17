@@ -15,6 +15,20 @@ class SlideSpeakClient
     load_csv
   end
 
+  def fetch_user
+    uri = URI("#{BASE_URL}/me")
+    request = Net::HTTP::Get.new(uri, headers)
+    response = execute_request(uri, request)
+    JSON.parse(response.body)
+  end
+
+  def fetch_themes
+    uri = URI("#{BASE_URL}/presentation/themes")
+    request = Net::HTTP::Get.new(uri, headers)
+    response = execute_request(uri, request)
+    JSON.parse(response.body)
+  end
+
   def load_csv
     unless File.exist?(CSV_FILE)
       CSV.open(CSV_FILE, 'w') { |csv| csv << %w[task_id plain_text status url] }
@@ -94,7 +108,6 @@ class SlideSpeakClient
   end
 end
 
-# Main CLI Loop
 if ENV['SLIDE_SPEAK_API_KEY'].nil?
   puts 'Error: SLIDE_SPEAK_API_KEY environment variable not set.'
   exit(1)
@@ -105,26 +118,44 @@ client = SlideSpeakClient.new(api_key)
 prompt = TTY::Prompt.new
 cursor = TTY::Cursor
 
+def say_hello(client)
+  user_info = client.fetch_user
+  user_name = user_info['user_name'] || "Guest"
+  puts "\n👋 Welcome, you are: #{user_name}!"
+end
+
 loop do
   choice = prompt.select("\nWhat would you like to do?", cycle: true) do |menu|
     menu.choice '📄 View existing presentations', 1
-    menu.choice '✨ Generate a new presentation', 2
-    menu.choice '🚪 Exit', 3
+    menu.choice '🎨 View available themes', 2
+    menu.choice '✨ Generate a new presentation', 3
+    menu.choice '⁉️ Who am I?', 4
+    menu.choice '🚪 Exit', 5
   end
+
+  print cursor.clear_screen
+  print cursor.move_to(0, 0)
 
   case choice
   when 1
-    print cursor.clear_screen
-    print cursor.move_to(0, 0)
     puts "\n📊 Existing Presentations:"
     client.display_csv
+    prompt.keypress("\nPress any key to return to the menu...")
+
   when 2
-    print cursor.clear_screen
-    print cursor.move_to(0, 0)
-    plain_text = prompt.ask("📝 Enter a topic for the presentation (leave blank for 'French Revolution'):", default: "Key moments in the french revolution.").strip
-    puts "\n✨ Generating presentation about '#{plain_text}'..."
-    
-    response = client.generate_presentation(plain_text)
+    themes = client.fetch_themes
+    rows = themes.map { |t| [t['name'], t['images']['cover']] }
+    table = TTY::Table.new(header: ['Theme Name', 'Cover Image'], rows: rows)
+    puts table.render(:unicode)
+    prompt.keypress("\nPress any key to return to the menu...")
+
+  when 3
+    themes = client.fetch_themes.map { |t| t['name'] }
+    theme = prompt.select("🎨 Choose a theme for your presentation (#{themes.size} options):", themes, default: "default")
+    plain_text = prompt.ask("📝 Enter a topic for the presentation (leave blank for 'French Revolution'):", default: "French Revolution").strip
+
+    puts "\n✨ Generating presentation about '#{plain_text}' with theme '#{theme}'..."
+    response = client.generate_presentation(plain_text, theme)
     if response['task_id']
       task_id = response['task_id']
       client.update_csv(task_id, plain_text, 'PENDING', '')
@@ -133,9 +164,16 @@ loop do
     else
       puts '❌ Error generating presentation.'
     end
-  when 3
+  when 4
+    say_hello(client)
+  when 5
     puts "\n👋 Goodbye!"
     break
+  end
+
+  if [1, 2].include? choice
+    print cursor.clear_screen
+    print cursor.move_to(0, 0)
   end
 end
 
