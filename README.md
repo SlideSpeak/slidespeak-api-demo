@@ -27,7 +27,7 @@ This project is a command-line tool that interacts with the **SlideSpeak API** t
 
 ### Ruby Script Demo
 
-![ruby script demo](https://github.com/user-attachments/assets/905b2446-3f32-4cf3-8552-41d2a1ed4542)
+![ruby script demo](https://github.com/user-attachments/assets/82680c02-53d1-4038-9fee-929cb5c1b1f6)
 
 ---
 
