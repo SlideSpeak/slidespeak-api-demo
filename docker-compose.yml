@@ -1,5 +1,6 @@
 services:
   ruby_service:
+    container_name: ruby_service
     build:
       context: .
       dockerfile: Dockerfile.ruby
@@ -9,6 +10,7 @@ services:
       - .:/usr/src/app
 
   python_service:
+    container_name: python_service
     build:
       context: .
       dockerfile: Dockerfile.python

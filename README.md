@@ -61,6 +61,8 @@ This project comes with a **Makefile** to automate tasks. Below is a table of av
 
 ## 💎 Ruby Script
 
+![ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/e786f654-9496-4e28-b868-ad4e8d74127a)
+
 The Ruby script, `slidespeak_client.rb`, performs the following tasks:
 
 1. Generates a presentation using the **SlideSpeak API**.
