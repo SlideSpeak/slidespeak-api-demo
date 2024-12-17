@@ -1,0 +1,18 @@
+services:
+  ruby_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.ruby
+    environment:
+      - SLIDE_SPEAK_API_KEY=${SLIDE_SPEAK_API_KEY}
+    volumes:
+      - .:/usr/src/app
+
+  python_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    environment:
+      - SLIDE_SPEAK_API_KEY=${SLIDE_SPEAK_API_KEY}
+    volumes:
+      - .:/app
