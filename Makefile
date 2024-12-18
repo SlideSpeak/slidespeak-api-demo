@@ -11,6 +11,10 @@ ruby:
 	@docker exec -it ruby_service /usr/local/bin/ruby slidespeak_generator.rb
 
 python:
+	@echo "Running Python edit script..."
+	@docker exec -it python_service /usr/local/bin/python slidespeak_editor.py 
+
+python_simple:
 	@echo "Running Python script..."
 	@docker exec -it python_service /usr/local/bin/python slidespeak_generator.py 
 
