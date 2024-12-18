@@ -18,5 +18,5 @@ python_simple:
 	@echo "Running Python script..."
 	@docker exec -it python_service /usr/local/bin/python slidespeak_generator.py 
 
-all: ruby python
+all: ruby python python_simple
 	@echo "All scripts executed successfully."
