@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile.ruby
     environment:
       - SLIDE_SPEAK_API_KEY=${SLIDE_SPEAK_API_KEY}
+    env_file:
+      - .env
     volumes:
       - .:/usr/src/app
 
@@ -16,5 +18,7 @@ services:
       dockerfile: Dockerfile.python
     environment:
       - SLIDE_SPEAK_API_KEY=${SLIDE_SPEAK_API_KEY}
+    env_file:
+      - .env
     volumes:
       - .:/app

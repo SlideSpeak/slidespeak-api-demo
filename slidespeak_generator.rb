@@ -73,7 +73,6 @@ class SlideSpeakClient
     end
   end
 
-
   def update_csv(task_id, plain_text, status, url)
     table = CSV.table(CSV_FILE)
     existing_row = table.find { |row| row[:task_id] == task_id }
@@ -108,12 +107,14 @@ class SlideSpeakClient
   end
 end
 
-if ENV['SLIDE_SPEAK_API_KEY'].nil?
+if ENV['SLIDE_SPEAK_API_KEY'].nil? or ENV['SLIDE_SPEAK_API_KEY'].empty?
   puts 'Error: SLIDE_SPEAK_API_KEY environment variable not set.'
+  puts 'Add the variable to the .env and run `make up` again'
   exit(1)
 end
 
-api_key = ENV['SLIDE_SPEAK_API_KEY']
+api_key = ENV['SLIDE_SPEAK_API_KEY'] || nil
+
 client = SlideSpeakClient.new(api_key)
 prompt = TTY::Prompt.new
 cursor = TTY::Cursor
