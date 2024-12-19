@@ -21,7 +21,8 @@ This project is a command-line tool that interacts with the **SlideSpeak API** t
 
 1. Set your **API key**:
    ```bash
-   export SLIDE_SPEAK_API_KEY="your_api_key_here"
+   cp .env.example .env
+   echo SLIDE_SPEAK_API_KEY=your_api_key_here > .env
    ```
 
 2. Use the `Makefile` to run the desired script:
@@ -1094,19 +1095,7 @@ This project uses the following **SlideSpeak API** endpoints:
 
 ## 🔑 API Key Setup
 
-The SlideSpeak API requires an **API key** to authenticate requests. You must set the `SLIDE_SPEAK_API_KEY` environment variable before running the scripts.
-
-### Steps to Set API Key:
-
-1. Export the API key in your terminal:
-   ```bash
-   export SLIDE_SPEAK_API_KEY="your_api_key_here"
-   ```
-
-2. Verify the variable is set:
-   ```bash
-   echo $SLIDE_SPEAK_API_KEY
-   ```
+The SlideSpeak API requires an **API key** to authenticate requests. You must set the `SLIDE_SPEAK_API_KEY` variable on the `.env` file.
 
 ---
 
