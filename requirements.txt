@@ -1,0 +1,5 @@
+requests==2.32.3
+python-pptx==1.0.2
+questionary==2.0.1
+uuid==1.30
+rich==13.9.4
